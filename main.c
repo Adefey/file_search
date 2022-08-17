@@ -11,8 +11,7 @@
  2. проблемы с доступом решить +
  */
 
-struct vector
-{
+struct vector {
   void *content;
   size_t size;
   size_t allocated;

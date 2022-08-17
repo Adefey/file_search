@@ -1,3 +1,4 @@
+#include "vector.h"
 #include <dirent.h>
 #include <fnmatch.h>
 #include <stdio.h>
@@ -7,22 +8,9 @@
 
 /*
  TODO
- 1. вектор по человечески
+ 1. вектор по человечески +
  2. проблемы с доступом решить +
  */
-
-struct vector {
-  void *content;
-  size_t size;
-  size_t allocated;
-};
-
-void add_to_string_arr(char ***array, size_t *length, char *string) {
-  ++(*length);
-  *array = realloc(*array, *length * (sizeof(char *)));
-  (*array)[*length - 1] = malloc((strlen(string) + 1) * sizeof(char));
-  strncpy((*array)[*length - 1], string, strlen(string) + 1);
-}
 
 int filter(const struct dirent *name) {
   if ((strcmp(name->d_name, ".") != 0) && (strcmp(name->d_name, "..") != 0)) {
@@ -31,8 +19,7 @@ int filter(const struct dirent *name) {
   return 0;
 }
 
-void _get_file_paths(char *directory, char *wildcard, char ***array,
-                     size_t *size) {
+void _get_file_paths(char *directory, char *wildcard, struct vector *v) {
   char *dir_path = malloc(PATH_MAX * sizeof(char));
   realpath(directory, dir_path);
   struct dirent **entries = NULL;
@@ -53,12 +40,12 @@ void _get_file_paths(char *directory, char *wildcard, char ***array,
       switch (entries[i]->d_type) {
       case DT_REG:
         if (!fnmatch(wildcard, entries[i]->d_name, FNM_NOESCAPE)) {
-          add_to_string_arr(array, size, full_filename);
+          push_back(v, full_filename, strlen(full_filename));
           free(full_filename);
         }
         break;
       case DT_DIR:
-        _get_file_paths(full_filename, wildcard, array, size);
+        _get_file_paths(full_filename, wildcard, v);
         free(full_filename);
       }
     }
@@ -70,12 +57,9 @@ void _get_file_paths(char *directory, char *wildcard, char ***array,
   free(dir_path);
 }
 
-int get_file_paths(char *directory, char *wildcard,
-                   char ***array) // returns array of strings of paths to files
-{
-  size_t arr_length = 0;
-  _get_file_paths(directory, wildcard, array, &arr_length);
-  return arr_length;
+int get_file_paths(char *directory, char *wildcard, struct vector *v) {
+  _get_file_paths(directory, wildcard, v);
+  return size(v);
 }
 
 int main(int argc, char **argv) {
@@ -85,17 +69,16 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  char **strings = NULL;
-  size_t size = 0;
-  size = get_file_paths(argv[1], argv[2], &strings);
+  struct vector *v = malloc(sizeof(struct vector));
+  create(v);
+
+  size_t size = get_file_paths(argv[1], argv[2], v);
 
   for (size_t i = 0; i < size; ++i) {
-    printf("%s%c", strings[i], '\n');
+    printf("%s%c", get_at(v, i), '\n');
   }
 
-  for (size_t i = 0; i < size; ++i) {
-    free(strings[i]);
-  }
-  free(strings);
+  destroy(v);
+  free(v);
   return EXIT_SUCCESS;
 }

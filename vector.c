@@ -40,12 +40,13 @@ void set_at(struct vector *this, size_t ind, void *value_ptr,
   }
 }
 
-void destroy(struct vector *this) // also destroys inside values
+void destroy(struct vector **this) // also destroys inside values
 {
-  for (size_t i = 0; i < this->size; ++i) {
-    free(this->content[i]);
+  for (size_t i = 0; i < (*this)->size; ++i) {
+    free((*this)->content[i]);
   }
-  free(this->content);
+  free((*this)->content);
+  free(*this);
 }
 
 size_t size(struct vector *this) { return this->size; }

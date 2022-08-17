@@ -41,13 +41,12 @@ void _get_file_paths(char *directory, char *wildcard, struct vector *v) {
       case DT_REG:
         if (!fnmatch(wildcard, entries[i]->d_name, FNM_NOESCAPE)) {
           push_back(v, full_filename, strlen(full_filename));
-          free(full_filename);
         }
         break;
       case DT_DIR:
         _get_file_paths(full_filename, wildcard, v);
-        free(full_filename);
       }
+      free(full_filename);
     }
     for (size_t i = 0; i < fetched_count; ++i) {
       free(entries[i]);
@@ -59,6 +58,7 @@ void _get_file_paths(char *directory, char *wildcard, struct vector *v) {
 
 int get_file_paths(char *directory, char *wildcard, struct vector *v) {
   _get_file_paths(directory, wildcard, v);
+
   return size(v);
 }
 
@@ -78,7 +78,7 @@ int main(int argc, char **argv) {
     printf("%s%c", get_at(v, i), '\n');
   }
 
-  destroy(v);
+  destroy(&v);
 
   return EXIT_SUCCESS;
 }

@@ -10,7 +10,7 @@ struct vector {
   size_t allocated;
 };
 
-void create(struct vector *this);
+void create(struct vector **this);
 
 void push_back(struct vector *this, void *value,
                size_t value_size); // adds value to vector with deep copy

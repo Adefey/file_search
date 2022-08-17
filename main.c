@@ -28,7 +28,7 @@ void _get_file_paths(char *directory, char *wildcard, struct vector *v) {
       scandir(dir_path, &entries, filter,
               alphasort); // not found or error == -1; size_t brakes on -1
   size_t fetched_count = (size_t)_fetched_count;
-  if (fetched_count != -1) {
+  if (_fetched_count != -1) {
     for (size_t i = 0; i < fetched_count; ++i) {
       char *full_filename =
           malloc((strlen(dir_path) + strlen(entries[i]->d_name) + 2) *
@@ -69,8 +69,8 @@ int main(int argc, char **argv) {
     return EXIT_FAILURE;
   }
 
-  struct vector *v = malloc(sizeof(struct vector));
-  create(v);
+  struct vector *v = NULL;
+  create(&v);
 
   size_t size = get_file_paths(argv[1], argv[2], v);
 
@@ -79,6 +79,6 @@ int main(int argc, char **argv) {
   }
 
   destroy(v);
-  free(v);
+
   return EXIT_SUCCESS;
 }

@@ -19,9 +19,8 @@ void push_back(struct vector *this, void *value_ptr,
     _expand(this);
   }
   this->content[this->size++] =
-      malloc((value_size + 1) * sizeof(char)); //+1 for strings
-  memcpy(this->content[this->size - 1], value_ptr,
-         value_size + 1); //+1 for strings (null terminator)
+      malloc((value_size) * sizeof(char)); //+1 for strings
+  memcpy(this->content[this->size - 1], value_ptr, value_size);
 }
 
 void *get_at(struct vector *this, size_t ind) {

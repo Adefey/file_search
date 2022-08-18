@@ -26,7 +26,7 @@ void _get_file_paths(char *directory, char *wildcard, struct vector *v) {
     for (size_t i = 0; i < fetched_count; ++i) {
       char *full_filename =
           malloc((strlen(dir_path) + strlen(entries[i]->d_name) + 2) *
-                 sizeof(char)); //+2 == strlen("/") + new null terminator
+                 sizeof(char)); //+2 == strlen("/") + new /0
       full_filename[0] = 0;
       strcat(full_filename, dir_path);
       strcat(full_filename, "/");
@@ -34,7 +34,8 @@ void _get_file_paths(char *directory, char *wildcard, struct vector *v) {
       switch (entries[i]->d_type) {
       case DT_REG:
         if (!fnmatch(wildcard, entries[i]->d_name, FNM_NOESCAPE)) {
-          push_back(v, full_filename, strlen(full_filename));
+          push_back(v, full_filename,
+                    strlen(full_filename) + 1); // strlen does not count /0
         }
         break;
       case DT_DIR:

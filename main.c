@@ -6,12 +6,6 @@
 #include <string.h>
 #include <sys/stat.h>
 
-/*
- TODO
- 1. вектор по человечески +
- 2. проблемы с доступом решить +
- */
-
 int filter(const struct dirent *name) {
   if ((strcmp(name->d_name, ".") != 0) && (strcmp(name->d_name, "..") != 0)) {
     return 1;
@@ -45,6 +39,7 @@ void _get_file_paths(char *directory, char *wildcard, struct vector *v) {
         break;
       case DT_DIR:
         _get_file_paths(full_filename, wildcard, v);
+        break;
       }
       free(full_filename);
     }
@@ -64,8 +59,8 @@ int get_file_paths(char *directory, char *wildcard, struct vector *v) {
 
 int main(int argc, char **argv) {
   if (argc != 3) {
-    printf("%s : %d",
-           "Usage: ./executable path wildcard; Given arguments count", argc);
+    printf("%s%d\n",
+           "Usage: ./executable path wildcard;\nGiven arguments count: ", argc);
     return EXIT_FAILURE;
   }
 

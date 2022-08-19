@@ -1,0 +1,35 @@
+name: CI
+on: [push]
+jobs:
+  Build-and-test:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install env
+        run: |
+          sudo apt update
+          sudo apt-get install libgtest-dev libgmock-dev lcov cmake make libbsd-dev valgrind cppcheck clang-tidy python clang-format
+          cd /usr/src/gtest
+          sudo cmake CMakeLists.txt
+          sudo make
+          sudo git clone https://github.com/google/googletest.git
+          cd googletest
+          sudo mkdir build
+          cd build
+          sudo cmake .. -DBUILD_SHARED_LIBS=ON -DINSTALL_GTEST=ON -DCMAKE_INSTALL_PREFIX:PATH=/usr
+          sudo make -j8
+          sudo make install
+          sudo ldconfig
+      - name: build all
+        run: sudo make
+      - name: test
+        run: |
+          cd ./test
+          make
+      - name: save product
+        uses: actions/upload-artifact@v3
+        path: ./Exe
+      - name: save tests
+        uses: actions/upload-artifact@v3
+        path: ./test/ExeTest

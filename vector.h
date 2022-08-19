@@ -10,17 +10,18 @@ struct vector {
   size_t allocated;
 };
 
-void create(struct vector **this);
+void create(struct vector **self);
 
-void push_back(struct vector *this, void *value,
+void push_back(struct vector *self, void *value,
                size_t value_size); // adds value to vector with deep copy
 
-void *get_at(struct vector *this, size_t ind);
+void *get_at(struct vector *self, size_t ind);
 
-void set_at(struct vector *this, size_t ind, void *value_ptr,
+void set_at(struct vector *self, size_t ind, void *value_ptr,
             size_t value_size);
 
-void destroy(struct vector **this);
+void destroy(struct vector **self);
 
-size_t size(struct vector *this);
+size_t size(struct vector *self);
+
 #endif

@@ -83,9 +83,13 @@ TEST(VectorPtrTest, TestSetAt) {
   char c = 3;
   vector_push_ptr_back(v, &c, sizeof(char));
 
+  std::string d = "hello";
+  vector_push_ptr_back(v, &d, sizeof(std::string));
+
   vector_set_ptr_at(v, 0, &b, sizeof(double));
   vector_set_ptr_at(v, 1, &c, sizeof(char));
-  vector_set_ptr_at(v, 2, &a, sizeof(int));
+  vector_set_ptr_at(v, 2, &d, sizeof(std::string));
+  vector_set_ptr_at(v, 3, &a, sizeof(int));
 
   double b_returned = *(static_cast<double *>(vector_get_ptr_at(v, 0)));
   EXPECT_EQ(b_returned, b);
@@ -93,7 +97,11 @@ TEST(VectorPtrTest, TestSetAt) {
   char c_returned = *(static_cast<char *>(vector_get_ptr_at(v, 1)));
   EXPECT_EQ(c_returned, c);
 
-  int a_returned = *(static_cast<int *>(vector_get_ptr_at(v, 2)));
+  std::string d_returned =
+      *(static_cast<std::string *>(vector_get_ptr_at(v, 2)));
+  EXPECT_EQ(d_returned, d);
+
+  int a_returned = *(static_cast<int *>(vector_get_ptr_at(v, 3)));
   EXPECT_EQ(a_returned, a);
 
   vector_destroy(&v);
@@ -172,9 +180,13 @@ TEST(VectorValueTest, TestSetAt) {
   char c = 3;
   vector_push_back(v, c, char);
 
+  std::string d = "hello";
+  vector_push_back(v, d, std::string);
+
   vector_set_at(v, 0, b, double);
   vector_set_at(v, 1, c, char);
-  vector_set_at(v, 2, a, int);
+  vector_set_at(v, 2, d, std::string);
+  vector_set_at(v, 3, a, int);
 
   double b_returned = vector_get_at(v, 0, double);
   EXPECT_EQ(b_returned, b);
@@ -182,15 +194,21 @@ TEST(VectorValueTest, TestSetAt) {
   char c_returned = vector_get_at(v, 1, char);
   EXPECT_EQ(c_returned, c);
 
-  int a_returned = vector_get_at(v, 2, int);
+  std::string d_returned = vector_get_at(v, 2, std::string);
+  EXPECT_EQ(d_returned, d);
+
+  int a_returned = vector_get_at(v, 3, int);
   EXPECT_EQ(a_returned, a);
 
   vector_destroy(&v);
 }
 
 /*
-TEST(VectorValueTest, TestRValue) { //Will not work. Vector can add only
-lvalues. Know how to fix it? PM me at Telegram @Adefe struct vector *v = NULL;
+ * Will not work. Vector can add only lvalues. Know how to fix it? PM me at
+Telegram @Adefe
+ *
+TEST(VectorValueTest, TestRValue) {
+struct vector *v = NULL;
   vector_create(&v);
 
   vector_push_back(v, 123, int);

@@ -35,8 +35,8 @@ void vector_set_ptr_at(struct vector *self, size_t ind, void *value_ptr,
                        size_t value_size) {
   if (ind < self->size) {
     free(self->content[ind]);
-    self->content[ind] = malloc((value_size + 1) * sizeof(char));
-    memcpy(self->content[ind], value_ptr, value_size + 1);
+    self->content[ind] = malloc(value_size * sizeof(char));
+    memcpy(self->content[ind], value_ptr, value_size);
   }
 }
 

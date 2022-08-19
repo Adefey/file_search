@@ -29,7 +29,11 @@ jobs:
           make
       - name: save product
         uses: actions/upload-artifact@v3
-        path: ./Exe
+        with:
+          name: file_search
+          path: ./Exe
       - name: save tests
         uses: actions/upload-artifact@v3
-        path: ./test/ExeTest
+        with:
+          name: file_search_test
+          path: ./test/ExeTest

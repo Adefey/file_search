@@ -12,15 +12,13 @@ void _vector_expand(struct vector *self) {
   self->content = realloc(self->content, self->allocated * (sizeof(void *)));
 }
 
-void vector_push_ptr_back(
-    struct vector *self, void *value_ptr,
-    size_t value_size) // adds value to vector with deep copy
-{
+/*Adds value to vector with deep copy*/
+void vector_push_ptr_back(struct vector *self, void *value_ptr,
+                          size_t value_size) {
   if ((self->allocated - self->size) < 2) {
     _vector_expand(self);
   }
-  self->content[self->size++] =
-      malloc((value_size) * sizeof(char)); //+1 for strings
+  self->content[self->size++] = malloc((value_size) * sizeof(unsigned char));
   memcpy(self->content[self->size - 1], value_ptr, value_size);
 }
 
@@ -35,7 +33,7 @@ void vector_set_ptr_at(struct vector *self, size_t ind, void *value_ptr,
                        size_t value_size) {
   if (ind < self->size) {
     free(self->content[ind]);
-    self->content[ind] = malloc(value_size * sizeof(char));
+    self->content[ind] = malloc(value_size * sizeof(unsigned char *));
     memcpy(self->content[ind], value_ptr, value_size);
   }
 }

@@ -12,4 +12,4 @@ clean:
 	rm *.o
 
 test:
-	valgrind ./ExeTest
+	valgrind --leak-check=full --track-origins=yes ./ExeTest

@@ -17,14 +17,7 @@ void vector_push_ptr_back(
     size_t value_size); // adds value to vector with deep copy
 
 #define vector_push_back(self, value, type)                                    \
-  {                                                                            \
-    {                                                                          \
-      type *buf = (type *)malloc(sizeof(type));                                \
-      *buf = value;                                                            \
-      vector_push_ptr_back(self, buf, sizeof(type));                           \
-      free(buf);                                                               \
-    }                                                                          \
-  }
+  vector_push_ptr_back(self, &value, sizeof(type));
 
 void *vector_get_ptr_at(struct vector *self, size_t ind);
 
@@ -35,8 +28,6 @@ void vector_set_ptr_at(struct vector *self, size_t ind, void *value_ptr,
 
 #define vector_set_at(self, ind, value, type)                                  \
   vector_set_ptr_at(self, ind, &value, sizeof(type))
-
-#define vector_
 
 void vector_destroy(struct vector **self);
 

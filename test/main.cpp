@@ -203,6 +203,7 @@ TEST(VectorValueTest, TestSetAt) {
 
   vector_destroy(&v);
 }
+
 /*
 TEST(VectorValueTest, TestRValue) {
   struct vector *v = NULL;
@@ -229,9 +230,24 @@ TEST(VectorValueTest, TestRValue) {
   EXPECT_EQ(vector_get_at(v, 4, std::string),
             std::string("testing RValue class instance"));
 
+  vector_set_at(v, 0, "test of set_at", std::string);
+  vector_set_at(v, 1, (structure{5555, 3131.0, 16}), structure);
+  vector_set_at(v, 2, 123, int);
+  vector_set_at(v, 3, 12335.6, double);
+  vector_set_at(v, 4, 20, char);
+
+  EXPECT_EQ(vector_get_at(v, 0, std::string), "test of set_at");
+  EXPECT_EQ(vector_get_at(v, 1, structure).first_field, 5555);
+  EXPECT_EQ(vector_get_at(v, 1, structure).second_field, 3131.0);
+  EXPECT_EQ(vector_get_at(v, 1, structure).third_field, 16);
+  EXPECT_EQ(vector_get_at(v, 2, int), 123);
+  EXPECT_EQ(vector_get_at(v, 3, double), 12335.6);
+  EXPECT_EQ(vector_get_at(v, 4, char), 20);
+
   vector_destroy(&v);
 }
 */
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

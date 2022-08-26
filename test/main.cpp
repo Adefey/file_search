@@ -203,25 +203,32 @@ TEST(VectorValueTest, TestSetAt) {
   vector_destroy(&v);
 }
 
-/*
- * Will not work. Vector can add only lvalues. Know how to fix it? PM me at
-Telegram @Adefe
- *
 TEST(VectorValueTest, TestRValue) {
-struct vector *v = NULL;
+  struct vector *v = NULL;
   vector_create(&v);
 
   vector_push_back(v, 123, int);
   vector_push_back(v, 321.0, double);
-  vector_push_back(v, 222, char);
+  vector_push_back(v, 12, char);
+  typedef struct structure {
+    int first_field;
+    double second_field;
+    size_t third_field;
+  } structure;
+  vector_push_back(v, (structure{-1, 2.0, 3}), structure);
+  vector_push_back(v, std::string("testing RValue class instance"),
+                   std::string);
 
   EXPECT_EQ(vector_get_at(v, 0, int), 123);
   EXPECT_EQ(vector_get_at(v, 1, double), 321.0);
-  EXPECT_EQ(vector_get_at(v, 2, char), 222);
+  EXPECT_EQ(vector_get_at(v, 2, char), 12);
+  EXPECT_EQ(vector_get_at(v, 3, structure).first_field, -1);
+  EXPECT_EQ(vector_get_at(v, 3, structure).second_field, 2.0);
+  EXPECT_EQ(vector_get_at(v, 3, structure).third_field, 3);
+  EXPECT_EQ(vector_get_at(v, 4, std::string), "testing RValue class instance");
 
   vector_destroy(&v);
 }
-*/
 
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
